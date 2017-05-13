@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private TextView et_show;
+    private TextView et_title;
     private Itinerary itinerary;
 
     @Override
@@ -37,6 +38,8 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         et_show = (TextView) findViewById(R.id.et_show);
+        et_title = (TextView) findViewById(R.id.et_title);
+        et_title.setText("Aguardando categoria..");
         et_show.setText("Aguardando Horários...");
         et_show.setTextSize(20);
         MeuAsyncTask asyncTask = new MeuAsyncTask();
@@ -59,7 +62,9 @@ public class MainActivity extends AppCompatActivity
         }
         @Override
         protected void onPostExecute(String result) {
+
             et_show.setText(result);
+            et_title.setText("Dia Útil");
         }
     }
 
@@ -101,14 +106,20 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_util_day) {
-            if(itinerary != null)
+            if(itinerary != null) {
                 et_show.setText(itinerary.getString("util_day"));
+                et_title.setText("Dia Útil");
+            }
         } else if (id == R.id.nav_saturday) {
-            if(itinerary != null)
+            if(itinerary != null) {
                 et_show.setText(itinerary.getString("saturday"));
+                et_title.setText("Sábado");
+            }
         } else if (id == R.id.nav_sunday) {
-            if(itinerary != null)
+            if(itinerary != null) {
                 et_show.setText(itinerary.getString("sunday"));
+                et_title.setText("Domingo");
+            }
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

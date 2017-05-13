@@ -11,6 +11,14 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    <!--android:background="@drawable/side_nav_bar"-->
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="125dp"
+        android:layout_height="89dp"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:src="@drawable/guanabara_60"/>
 
     <!--<ImageView-->
         <!--android:id="@+id/imageView"-->
@@ -23,7 +31,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="Itinerários da linha 60"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-condensed"
+        android:text="Divisão de Horários "
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <!--<TextView-->
