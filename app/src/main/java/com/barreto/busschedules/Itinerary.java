@@ -37,4 +37,24 @@ public class Itinerary implements Serializable{
         }
         return texto;
     }
+
+    public String getString(int sec_name){
+        String  name = "";
+        switch (sec_name){
+            case 0:
+                name = "util_day";
+                break;
+            case 1:
+                name = "saturday";
+                break;
+            case 2:
+                name = "sunday";
+                break;
+            default:
+                name = "sunday";
+                break;
+        }
+//        return sec_name + "";
+        return getString(name);
+    }
 }

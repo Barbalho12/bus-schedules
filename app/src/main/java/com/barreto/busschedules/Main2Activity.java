@@ -1,64 +1,65 @@
 package com.barreto.busschedules;
 
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.TextView;
 
 import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-
-    private static Itinerary itinerary;
-
+public class Main2Activity extends AppCompatActivity {
     private static final String TAG = "TEST";
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    private static Itinerary itinerary;
+
     private ViewPager mViewPager;
+
+//    private static RelativeLayout wait_info = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.v(TAG, "Create Activity");
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main2);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+//        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+//
+//        mViewPager = (ViewPager) findViewById(R.id.container);
+//        mViewPager.setAdapter(mSectionsPagerAdapter);
+//
+//        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+//        tabLayout.setupWithViewPager(mViewPager);
 
         MeuAsyncTask asyncTask = new MeuAsyncTask();
         asyncTask.execute();
     }
 
     class MeuAsyncTask extends AsyncTask<Void, Void, String > {
+
+
         @Override
         protected String doInBackground(Void... params) {
             GuanabaraService guanabaraService = new GuanabaraService();
             String text = "";
             try {
+
                 itinerary = guanabaraService.search();
                 text = itinerary.getString("util_day");
             } catch (IOException e) {
@@ -80,67 +81,27 @@ public class MainActivity extends AppCompatActivity
 
             TextView textView = (TextView) findViewById(R.id.section_label);
             textView.setText(result);
+
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_main2, menu);
+//        return true;
+//    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        if (id == R.id.nav_util_day) {
-            if(itinerary != null) {
-//                et_show.setText(itinerary.getString("util_day"));
-//                et_title.setText("Dia Útil");
-            }
-        } else if (id == R.id.nav_saturday) {
-            if(itinerary != null) {
-//                et_show.setText(itinerary.getString("saturday"));
-//                et_title.setText("Sábado");
-            }
-        } else if (id == R.id.nav_sunday) {
-            if(itinerary != null) {
-//                et_show.setText(itinerary.getString("sunday"));
-//                et_title.setText("Domingo");
-            }
-        }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     /**
      * A placeholder fragment containing a simple view.
