@@ -36,21 +36,21 @@ public class GuanabaraService {
         for (String time : domingo) {
             domingoTimes.add(new Time(time));
         }
-        itinerary.createSlot("sunday", domingoTimes);
+        itinerary.createSlot(Itinerary.SUNDAY, domingoTimes);
 
 
         ArrayList sabadoTimes = new ArrayList<>();
         for (String time : sabado) {
             sabadoTimes.add(new Time(time));
         }
-        itinerary.createSlot("saturday", sabadoTimes);
+        itinerary.createSlot(Itinerary.SATURDAY, sabadoTimes);
 
 
         ArrayList diaUtilTimes = new ArrayList<Time>();
         for (String time : diaUtil) {
             diaUtilTimes.add(new Time(time));
         }
-        itinerary.createSlot("util_day", diaUtilTimes);
+        itinerary.createSlot(Itinerary.UTIL_DAY, diaUtilTimes);
 
         return itinerary;
     }

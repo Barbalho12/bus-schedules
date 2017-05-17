@@ -1,7 +1,10 @@
 package com.barreto.busschedules;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -19,12 +22,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity{
+//        implements NavigationView.OnNavigationItemSelectedListener {
 
     private static Itinerary itinerary;
 
@@ -36,34 +48,76 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main2);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.setDrawerListener(toggle);
+//        toggle.syncState();
+//
+//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+//        navigationView.setNavigationItemSelectedListener(this);
 
         MeuAsyncTask asyncTask = new MeuAsyncTask();
         asyncTask.execute();
     }
 
+    static String mensagem = "";
+
     class MeuAsyncTask extends AsyncTask<Void, Void, String > {
         @Override
         protected String doInBackground(Void... params) {
             GuanabaraService guanabaraService = new GuanabaraService();
+
             String text = "";
+
+            Itinerary itLocal = load(getApplicationContext(), "horarios.save");
+            Itinerary itLocalSeach = null;
+
             try {
-                itinerary = guanabaraService.search();
-                text = itinerary.getString("util_day");
+                itLocalSeach = guanabaraService.search();
+                Log.v(TAG, itLocalSeach.getString(Itinerary.UTIL_DAY) + " -- ");
+                Log.v(TAG, itLocalSeach.getString(Itinerary.SATURDAY) + " -- ");
+                Log.v(TAG, itLocalSeach.getString(Itinerary.SUNDAY) + " -- ");
             } catch (IOException e) {
-                e.printStackTrace();
-                text = "error";
+                text = "Sem conexão";
+            }
+
+            try {
+
+                if(itLocal == null && itLocalSeach == null){
+
+                    mensagem =  "Erro ao buscar Horários";
+                    Log.v(TAG, "1");
+                }else if(itLocal == null && itLocalSeach != null){
+                    itinerary = itLocalSeach;
+                    save(getApplicationContext(), "horarios.save", itLocalSeach);
+
+                    mensagem =  "Os Horários foram Carregados com sucesso";
+                    Log.v(TAG, "2");
+                }else if(itLocalSeach == null){
+
+                    itinerary = itLocal;
+                    mensagem =  "Horários carregados localmente";
+                    Log.v(TAG, "3");
+
+                }else if(itLocal != null && itLocalSeach != null && itLocal.equals(itLocalSeach)){
+                    itinerary = itLocal;
+                    mensagem =  "Horários já atualizados";
+                    Log.v(TAG, "4");
+
+                }else if(itLocal != null && itLocalSeach != null && !itLocal.equals(itLocalSeach)){
+                    itinerary = itLocalSeach;
+                    save(getApplicationContext(), "Horarios.save", itLocalSeach);
+                    mensagem =  "Os Horários foram atualizados";
+                    Log.v(TAG, "5");
+                }
+                text = itinerary.getString(Itinerary.UTIL_DAY);
+            } catch (Exception e) {
+                text = "Sem conexão";
             }
             return text;
         }
@@ -80,18 +134,20 @@ public class MainActivity extends AppCompatActivity
 
             TextView textView = (TextView) findViewById(R.id.section_label);
             textView.setText(result);
+
+            Toast.makeText(getApplicationContext(),mensagem, Toast.LENGTH_LONG).show();
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
+//    @Override
+//    public void onBackPressed() {
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        if (drawer.isDrawerOpen(GravityCompat.START)) {
+//            drawer.closeDrawer(GravityCompat.START);
+//        } else {
+//            super.onBackPressed();
+//        }
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -115,31 +171,102 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+//    @Override
+//    public boolean onNavigationItemSelected(MenuItem item) {
+//
+//        int id = item.getItemId();
+//
+//        if (id == R.id.nav_util_day) {
+//            if(itinerary != null) {
+////                et_show.setText(itinerary.getString("util_day"));
+////                et_title.setText("Dia Útil");
+//            }
+//        } else if (id == R.id.nav_saturday) {
+//            if(itinerary != null) {
+////                et_show.setText(itinerary.getString("saturday"));
+////                et_title.setText("Sábado");
+//            }
+//        } else if (id == R.id.nav_sunday) {
+//            if(itinerary != null) {
+////                et_show.setText(itinerary.getString("sunday"));
+////                et_title.setText("Domingo");
+//            }
+//        }
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        drawer.closeDrawer(GravityCompat.START);
+//        return true;
+//    }
 
-        int id = item.getItemId();
+    public void save(Context context, String fileName, Itinerary itinerary){
 
-        if (id == R.id.nav_util_day) {
-            if(itinerary != null) {
-//                et_show.setText(itinerary.getString("util_day"));
-//                et_title.setText("Dia Útil");
-            }
-        } else if (id == R.id.nav_saturday) {
-            if(itinerary != null) {
-//                et_show.setText(itinerary.getString("saturday"));
-//                et_title.setText("Sábado");
-            }
-        } else if (id == R.id.nav_sunday) {
-            if(itinerary != null) {
-//                et_show.setText(itinerary.getString("sunday"));
-//                et_title.setText("Domingo");
-            }
+        try {
+
+            FileOutputStream fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(itinerary);
+            os.close();
+            fos.close();
+            Log.v(TAG, "Salvo");
+        } catch (FileNotFoundException e) {
+            Log.v(TAG, "Error salvar");
+            e.printStackTrace();
+        } catch (IOException e) {
+            Log.v(TAG, "Error salvar");
+            e.printStackTrace();
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+
     }
+
+    public Itinerary load(Context context, String fileName){
+
+        try {
+
+            FileInputStream fis = context.openFileInput(fileName);
+            ObjectInputStream is = new ObjectInputStream(fis);
+            Itinerary itinerary = (Itinerary) is.readObject();
+            is.close();
+            fis.close();
+            Log.v(TAG, "Lido");
+            return itinerary;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        Log.v(TAG, "Error leitura");
+        return null;
+    }
+
+//    void insere(){
+//        BancoController crud = new BancoController(getBaseContext());
+//        EditText titulo = (EditText)findViewById(R.id.editText);
+//        EditText autor = (EditText)findViewById((R.id.editText2));
+//        EditText editora = (EditText)findViewById(R.id.editText3);
+//        String tituloString = titulo.getText().toString();
+//        String autorString = autor.getText().toString();
+//        String editoraString = editora.getText().toString();
+//        String resultado;
+//        resultado = crud.insereDado(tituloString,autorString,editoraString);
+//        resultado = crud.insereDado(itinerary);
+//        Toast.makeText(getApplicationContext(), resultado, Toast.LENGTH_LONG).show();
+//    }
+//
+//    void consutla(){
+//        BancoController crud = new BancoController(getBaseContext());
+//        Cursor cursor = crud.carregaDados();
+//
+//        String[] nomeCampos = new String[] {CriaBanco.ID, CriaBanco.TITULO};
+//        int[] idViews = new int[] {R.id.idLivro, R.id.nomeLivro};
+//
+//        SimpleCursorAdapter adaptador = new SimpleCursorAdapter(getBaseContext(),
+//                R.layout.livros_layout,cursor,nomeCampos,idViews, 0);
+//        lista = (ListView)findViewById(R.id.listView);
+//        lista.setAdapter(adaptador);
+//
+//    }
+
 
 
     /**
@@ -225,4 +352,7 @@ public class MainActivity extends AppCompatActivity
             return null;
         }
     }
+
+
+
 }
