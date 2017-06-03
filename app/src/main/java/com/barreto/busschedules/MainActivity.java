@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
     public List<Integer> updateTime() {
         int dia = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         List<Time> listTimes = itinerary.getSlotTimes(getDay(dia));
-        int horas = Calendar.getInstance().get(Calendar.HOUR);
+        int horas = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         int minutos = Calendar.getInstance().get(Calendar.MINUTE);
         int tempoAtual = horas * 60 + minutos;
         int time1, time2;

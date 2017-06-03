@@ -131,9 +131,7 @@ public class Itinerary implements Serializable{
         Itinerary otherIt = (Itinerary) object;
         if((util_days == null || saturday == null || sunday == null) && (otherIt.util_days == null || otherIt.saturday == null || otherIt.sunday == null)){
             return true;
-        }/*else  if((util_days == null || saturday == null || sunday == null) || (otherIt.util_days == null || otherIt.saturday == null || otherIt.sunday == null)){
-            return false;
-        }*/
+        }
         if(getString(UTIL_DAY).equals(otherIt.getString(UTIL_DAY))
                 && getString(SATURDAY).equals(otherIt.getString(SATURDAY))
                 && getString(SUNDAY).equals(otherIt.getString(SUNDAY))){
