@@ -117,7 +117,7 @@ public class Itinerary implements Serializable{
                 break;
         }
 //        return sec_name + "";
-        return getString(name);
+        return name;
     }
 
     @Override

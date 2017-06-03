@@ -8,9 +8,104 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.barreto.busschedules.MainActivity$PlaceholderFragment">
 
-    <TextView
-        android:id="@+id/section_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <!--<TextView-->
+        <!--android:id="@+id/section_label"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content" />-->
+
+    <GridView
+        android:id="@+id/gridview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnWidth="50dp"
+        android:padding="2dp"
+        android:textAlignment="center"
+        android:numColumns="auto_fit"
+        android:verticalSpacing="1dp"
+        android:horizontalSpacing="1dp"
+        android:stretchMode="columnWidth"
+        android:gravity="center"
+        />
+
+
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/rl_prev_info"-->
+        <!--android:layout_marginTop="50dp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/gridview"-->
+        <!--android:background="#6e272c"-->
+        <!--android:layout_margin="10dp"-->
+        <!--android:padding="10dp">-->
+
+        <!--<RelativeLayout-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_centerVertical="true">-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/tv_hour_prev"-->
+                <!--android:text="09:35"-->
+                <!--android:textSize="40dp"-->
+                <!--android:textColor="#fff"-->
+                <!--android:fontFamily="sans-serif"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_width="wrap_content"/>-->
+            <!--<TextView-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:id="@+id/tv_time_prev"-->
+                <!--android:text="Saiu a 10min"-->
+                <!--android:textSize="16dp"-->
+                <!--android:textColor="#fff"-->
+                <!--android:fontFamily="sans-serif"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_below="@+id/tv_hour_prev"/>-->
+        <!--</RelativeLayout>-->
+    <!--</RelativeLayout>-->
+
+    <RelativeLayout
+        android:id="@+id/rl_next_info"
+        android:visibility="invisible"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/gridview"
+        android:background="#235444"
+        android:layout_margin="10dp"
+        android:padding="10dp">
+
+        <RelativeLayout
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true">
+
+            <TextView
+                android:id="@+id/tv_hour_next"
+                android:text="09:35"
+                android:textSize="40dp"
+                android:textColor="#fff"
+                android:fontFamily="sans-serif"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
+            <TextView
+                android:layout_marginTop="5dp"
+                android:id="@+id/tv_time_next"
+                android:text="Faltam 10min"
+                android:textSize="16dp"
+                android:textColor="#fff"
+                android:fontFamily="sans-serif"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_below="@+id/tv_hour_next"/>
+        </RelativeLayout>
+    </RelativeLayout>
 
 </RelativeLayout>
