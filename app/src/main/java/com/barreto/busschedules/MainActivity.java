@@ -8,6 +8,7 @@ import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.BaseColumns;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -138,14 +139,16 @@ public class MainActivity extends AppCompatActivity {
             mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
             mViewPager = (ViewPager) findViewById(R.id.container);
             mViewPager.setAdapter(mSectionsPagerAdapter);
-
             TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
             tabLayout.setupWithViewPager(mViewPager);
 
             Toast.makeText(getApplicationContext(), mensagem, Toast.LENGTH_LONG).show();
+
+//            flag = true;
+//            startProgress();
         }
     }
-
+//    boolean flag = false;
     public static String getDay(int dia) {
         String diaS;
         if (dia == 1) {
@@ -158,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         return diaS;
     }
 
-    public List<Integer> updateTime() {
+    public static List<Integer> updateTime() {
         int dia = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         List<Time> listTimes = itinerary.getSlotTimes(getDay(dia));
         int horas = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
@@ -342,8 +345,8 @@ public class MainActivity extends AppCompatActivity {
 
             gridview = (GridView) rootView.findViewById(R.id.gridview);
             RelativeLayout rlNextInfo = (RelativeLayout) rootView.findViewById(R.id.rl_next_info);
-            TextView tvNextHour = (TextView) rootView.findViewById(R.id.tv_hour_next);
-            TextView tvNextHourWait = (TextView) rootView.findViewById(R.id.tv_time_next);
+            final TextView tvNextHour = (TextView) rootView.findViewById(R.id.tv_hour_next);
+            final TextView tvNextHourWait = (TextView) rootView.findViewById(R.id.tv_time_next);
 
             int n = getArguments().getInt(ARG_SECTION_NUMBER);
 
@@ -463,6 +466,40 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
+//
+//    protected void onResume() {
+//        super.onResume();
+//
+//        if(flag){
+//            informationsTime = updateTime();
+//            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+//            mViewPager = (ViewPager) findViewById(R.id.container);
+//            mViewPager.removeAllViews();
+//            mViewPager.setAdapter(mSectionsPagerAdapter);
+//            TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+//            tabLayout.setupWithViewPager(mViewPager);
+//
+//
+//        }
+//
+//    }
 
-
+//    public void startProgress() {
+//        Runnable runnable = new Runnable() {
+//            @Override
+//            public void run() {
+//                while (true) {
+//                    SystemClock.sleep(5000);
+//                    onPause();
+//                    onResume();
+//                }
+//            }
+//        };
+//        new Thread(runnable).start();
+//    }
+//
+//    // Simulating something timeconsuming
+//    public static void doFakeWork() {
+//        SystemClock.sleep(5000);
+//    }
 }
