@@ -46,13 +46,10 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_below="@+id/tv_hour_next"/>
+
+
         </RelativeLayout>
     </RelativeLayout>
-
-    <!--<ScrollView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content">-->
-
 
             <GridView
                 android:id="@+id/gridview"
@@ -68,10 +65,5 @@
                 android:stretchMode="columnWidth"
                 android:gravity="center"
                 />
-
-    <!--</ScrollView>-->
-
-
-
 
 </LinearLayout>

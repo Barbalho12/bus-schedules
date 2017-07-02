@@ -1,24 +1,16 @@
 package com.barreto.busschedules;
 
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
-import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.provider.BaseColumns;
-import android.support.design.widget.NavigationView;
+import android.os.CountDownTimer;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -27,15 +19,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.SimpleCursorAdapter;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,9 +36,9 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
-//        implements NavigationView.OnNavigationItemSelectedListener {
 
     private static Itinerary itinerary;
     private static List<Integer> informationsTime;
@@ -63,12 +51,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_show);
-////       DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-////       ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-////       this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-////       drawer.setDrawerListener(toggle);
-////       toggle.syncState();
 
         setContentView(R.layout.activity_main2);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -143,12 +125,9 @@ public class MainActivity extends AppCompatActivity {
             tabLayout.setupWithViewPager(mViewPager);
 
             Toast.makeText(getApplicationContext(), mensagem, Toast.LENGTH_LONG).show();
-
-//            flag = true;
-//            startProgress();
         }
     }
-//    boolean flag = false;
+
     public static String getDay(int dia) {
         String diaS;
         if (dia == 1) {
@@ -217,18 +196,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -311,11 +285,7 @@ public class MainActivity extends AppCompatActivity {
          * fragment.
          */
 
-//        private static TextView textView;
         private static GridView gridview;
-//        private static int pos;
-
-//        private static RelativeLayout rlNextInfo;
 
         private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -341,25 +311,28 @@ public class MainActivity extends AppCompatActivity {
 
             View rootView = inflater.inflate(R.layout.fragment_main2, container, false);
 
-//            textView = (TextView) rootView.findViewById(R.id.section_label);
-
             gridview = (GridView) rootView.findViewById(R.id.gridview);
-            RelativeLayout rlNextInfo = (RelativeLayout) rootView.findViewById(R.id.rl_next_info);
+            final RelativeLayout rlNextInfo = (RelativeLayout) rootView.findViewById(R.id.rl_next_info);
             final TextView tvNextHour = (TextView) rootView.findViewById(R.id.tv_hour_next);
             final TextView tvNextHourWait = (TextView) rootView.findViewById(R.id.tv_time_next);
 
             int n = getArguments().getInt(ARG_SECTION_NUMBER);
 
             if (itinerary != null) {
+                update(n, tvNextHour, tvNextHourWait, rlNextInfo);
+            }
+            return rootView;
+        }
 
-                gridview.setAdapter(new ImageAdapter(getActivity(), itinerary.getString(n)));
-                if (itinerary.getString(n).equals(getDay(informationsTime.get(0)))) {
-                    rlNextInfo.setVisibility(View.VISIBLE);
+        void update(final int n, final TextView tvNextHour, final TextView tvNextHourWait, final RelativeLayout rlNextInfo){
 
-                    tvNextHour.setText(itinerary.getSlotTimes(itinerary.getString(n)).get(informationsTime.get(2)).getTimeText());
-                    tvNextHourWait.setText("Faltam " + informationsTime.get(4) + "min");
-                }
+            gridview.setAdapter(new ImageAdapter(getActivity(), itinerary.getString(n)));
+            if (itinerary.getString(n).equals(getDay(informationsTime.get(0)))) {
+                rlNextInfo.setVisibility(View.VISIBLE);
 
+                informationsTime = updateTime();
+
+                tvNextHour.setText(itinerary.getSlotTimes(itinerary.getString(n)).get(informationsTime.get(2)).getTimeText());
                 gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     public void onItemClick(AdapterView<?> parent, View v,
                                             int position, long id) {
@@ -367,12 +340,34 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-//                textView.setText(itinerary.getString(n));
-            } else {
-//                textView.setText("Aguardando...");
+                new CountDownTimer(informationsTime.get(4)*60*1000, 1000) { // adjust the milli seconds here
+
+                    public void onTick(long millisUntilFinished) {
+                        String FORMAT;
+                        if(millisUntilFinished > 60*1000*60){
+                            FORMAT = "%02dh%02dm%02ds";
+                            tvNextHourWait.setText(
+                                    "Faltam "+ String.format(FORMAT,
+                                            TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
+                                            TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(
+                                                    TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
+                                            TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(
+                                                    TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
+                        }else{
+                            FORMAT = "%02dm%02ds";
+                            tvNextHourWait.setText("Faltam "+String.format(FORMAT,
+                                    TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
+                                    TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(
+                                            TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
+                        }
+                    }
+                    public void onFinish(){
+                        update(n, tvNextHour, tvNextHourWait, rlNextInfo);
+                    }
+                }.start();
             }
 
-            return rootView;
+
         }
 
         public class ImageAdapter extends BaseAdapter {
@@ -427,7 +422,6 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     textView = (TextView) convertView;
                 }
-//                Log.v(TAG, day);
                 textView.setText(itinerary.getSlotTimes(day).get(position).getTimeText());
                 return textView;
             }
@@ -466,40 +460,5 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
-//
-//    protected void onResume() {
-//        super.onResume();
-//
-//        if(flag){
-//            informationsTime = updateTime();
-//            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-//            mViewPager = (ViewPager) findViewById(R.id.container);
-//            mViewPager.removeAllViews();
-//            mViewPager.setAdapter(mSectionsPagerAdapter);
-//            TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-//            tabLayout.setupWithViewPager(mViewPager);
-//
-//
-//        }
-//
-//    }
 
-//    public void startProgress() {
-//        Runnable runnable = new Runnable() {
-//            @Override
-//            public void run() {
-//                while (true) {
-//                    SystemClock.sleep(5000);
-//                    onPause();
-//                    onResume();
-//                }
-//            }
-//        };
-//        new Thread(runnable).start();
-//    }
-//
-//    // Simulating something timeconsuming
-//    public static void doFakeWork() {
-//        SystemClock.sleep(5000);
-//    }
 }
