@@ -1,7 +1,4 @@
-# Bus Schedules
-<p ><img src ="Art/guanabara_60_2.png" width="100px"/></p>
-
-<p align="center"><img src ="Art/prints.png" width="500px"/></p>
+<p ><img src ="Art/logo.png" width="400px"/></p>
 
 ---
 Bus Schedules é um aplicativo para dispositivos android, desenvolvido para exibir horários de saída do terminal da linha 60 da empresa Guanabara em Natal. 
@@ -14,6 +11,7 @@ Bus Schedules é um aplicativo para dispositivos android, desenvolvido para exib
     * Mostra o horário do último ônibos que saiu;
     * Mostra o horário exato de saída do próximo ônibos (atualizado diâmicamente);
 
+<p align="center"><img src ="Art/prints.png" /></p>
 
 ## Desenvolvedor
 
