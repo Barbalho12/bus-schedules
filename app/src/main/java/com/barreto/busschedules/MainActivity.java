@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -184,16 +184,6 @@ public class MainActivity extends AppCompatActivity {
         return times;
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        if (drawer.isDrawerOpen(GravityCompat.START)) {
-//            drawer.closeDrawer(GravityCompat.START);
-//        } else {
-//            super.onBackPressed();
-//        }
-//    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -209,33 +199,6 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-
-//    @Override
-//    public boolean onNavigationItemSelected(MenuItem item) {
-//
-//        int id = item.getItemId();
-//
-//        if (id == R.id.nav_util_day) {
-//            if(itinerary != null) {
-////                et_show.setText(itinerary.getString("util_day"));
-////                et_title.setText("Dia Útil");
-//            }
-//        } else if (id == R.id.nav_saturday) {
-//            if(itinerary != null) {
-////                et_show.setText(itinerary.getString("saturday"));
-////                et_title.setText("Sábado");
-//            }
-//        } else if (id == R.id.nav_sunday) {
-//            if(itinerary != null) {
-////                et_show.setText(itinerary.getString("sunday"));
-////                et_title.setText("Domingo");
-//            }
-//        }
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        drawer.closeDrawer(GravityCompat.START);
-//        return true;
-//    }
 
     public void save(Context context, String fileName, Itinerary itinerary) {
 
@@ -309,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-            View rootView = inflater.inflate(R.layout.fragment_main2, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
             gridview = (GridView) rootView.findViewById(R.id.gridview);
             final RelativeLayout rlNextInfo = (RelativeLayout) rootView.findViewById(R.id.rl_next_info);
@@ -328,7 +291,9 @@ public class MainActivity extends AppCompatActivity {
 
             gridview.setAdapter(new ImageAdapter(getActivity(), itinerary.getString(n)));
             if (itinerary.getString(n).equals(getDay(informationsTime.get(0)))) {
+
                 rlNextInfo.setVisibility(View.VISIBLE);
+                rlNextInfo.setBackgroundColor(Color.rgb(45,131,109));
 
                 informationsTime = updateTime();
 
@@ -406,18 +371,20 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     textView.setTextSize(18);
-                    textView.setTextColor(Color.WHITE);
+                    textView.setTextColor(Color.rgb(100,100,100));
 
                     if (day.equals(getDay(informationsTime.get(0)))) {
                         if (position == informationsTime.get(1)) {
-                            textView.setBackgroundColor(Color.RED);
+                            textView.setTextColor(Color.WHITE);
+                            textView.setBackgroundColor(Color.rgb(166, 67, 69));
                         } else if (position == informationsTime.get(2)) {
-                            textView.setBackgroundColor(Color.rgb(7, 138, 0));
+                            textView.setTextColor(Color.WHITE);
+                            textView.setBackgroundColor(Color.rgb(45,131,109));
                         } else {
-                            textView.setBackgroundColor(Color.DKGRAY);
+                            textView.setBackgroundColor(Color.rgb(244,244,244));
                         }
                     } else {
-                        textView.setBackgroundColor(Color.DKGRAY);
+                        textView.setBackgroundColor(Color.rgb(244,244,244));
                     }
                 } else {
                     textView = (TextView) convertView;

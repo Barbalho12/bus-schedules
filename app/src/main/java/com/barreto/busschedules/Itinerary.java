@@ -28,63 +28,9 @@ public class Itinerary implements Serializable{
         slots.put(name, hors);
     }
 
-//    void createSlot(String TYPE, List<Time> hors){
-//
-//        String texto = "";
-//        boolean init = true;
-//        for (Time time : hors) {
-//            if(init) {
-//                texto += time.getTimeText();
-//                init = false;
-//            }else{
-//                texto += "      " + time.getTimeText();
-//            }
-//        }
-//        if(TYPE.equals(UTIL_DAY)){
-//            util_days = texto;
-//        }else if(TYPE.equals(SATURDAY)){
-//            saturday = texto;
-//        }else if(TYPE.equals(SUNDAY)){
-//            sunday = texto;
-//        }
-//    }
-
-//    void createSlot(String TYPE, String slot){
-//        if(TYPE.equals(UTIL_DAY)){
-//            util_days = slot;
-//        }else if(TYPE.equals(SATURDAY)){
-//            saturday = slot;
-//        }else if(TYPE.equals(SUNDAY)){
-//            sunday = slot;
-//        }
-////        slots.put(name, hors);
-//    }
-
     List<Time> getSlotTimes(String name){
         return slots.get(name);
     }
-
-//    String getSlotTimes(String TYPE){
-//        if(TYPE.equals(UTIL_DAY)){
-//            return util_days;
-//        }else if(TYPE.equals(SATURDAY)){
-//            return saturday;
-//        }else if(TYPE.equals(SUNDAY)){
-//            return sunday;
-//        }
-//        return sunday;
-//    }
-
-//    String getString(String TYPE){
-//        if(TYPE.equals(UTIL_DAY)){
-//            return util_days;
-//        }else if(TYPE.equals(SATURDAY)){
-//            return saturday;
-//        }else if(TYPE.equals(SUNDAY)){
-//            return sunday;
-//        }
-//        return sunday;
-//    }
 
     public String getString(String name){
         String texto = "";
@@ -116,7 +62,6 @@ public class Itinerary implements Serializable{
                 name = SUNDAY;
                 break;
         }
-//        return sec_name + "";
         return name;
     }
 

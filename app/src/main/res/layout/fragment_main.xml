@@ -5,22 +5,23 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
+    android:background="#ffffff"
     android:orientation="vertical"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.barreto.busschedules.MainActivity$PlaceholderFragment">
 
     <RelativeLayout
         android:id="@+id/rl_next_info"
-        android:visibility="invisible"
-        android:layout_marginTop="20dp"
+        android:visibility="visible"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/gridview"
-        android:background="#235444"
+        android:background="#7a7e7d"
+        android:layout_marginBottom="1dp"
         android:padding="5dp">
 
         <RelativeLayout
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -46,9 +47,8 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_below="@+id/tv_hour_next"/>
-
-
         </RelativeLayout>
+
     </RelativeLayout>
 
             <GridView
@@ -56,7 +56,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:columnWidth="50dp"
-                android:padding="2dp"
                 android:textAlignment="center"
                 android:numColumns="auto_fit"
                 android:verticalSpacing="1dp"

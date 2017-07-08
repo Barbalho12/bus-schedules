@@ -31,7 +31,6 @@ public class Time implements Serializable {
             }
         }catch(Exception erro){
             erro.printStackTrace();
-            //System.err.println("[Time Constructor format 'hh:mm' ERROR] "+erro.getCause());
         }
     }
 
