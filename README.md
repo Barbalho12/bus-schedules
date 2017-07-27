@@ -10,9 +10,9 @@ Bus Schedules é um aplicativo para dispositivos android, desenvolvido para exib
 * Subdivide os horários por dia: Dia útil, Sábado, Domingo/feriado;
 * Exibe todos os horários por categoria;
 * Reconhece o dia atual, exibindo informações extras como:
-    * Mostra o horário do próximo ônibos a sair;
-    * Mostra o horário do último ônibos que saiu;
-    * Mostra o horário exato de saída do próximo ônibos (atualizado diâmicamente);
+    * Mostra o horário do próximo ônibus a sair;
+    * Mostra o horário do último ônibus que saiu;
+    * Mostra o horário exato de saída do próximo ônibus (atualizado dinamicamente);
 
 <p align="center"><img src ="Art/prints.png" /></p>
 
